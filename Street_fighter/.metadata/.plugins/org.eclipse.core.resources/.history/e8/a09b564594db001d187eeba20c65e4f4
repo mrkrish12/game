@@ -1,0 +1,23 @@
+package com.krishna.gaming;
+
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+
+public class IntroScreen {
+
+	
+	public static void main(String[] arugs)
+	{
+		GameFrame obj = null;
+		try {
+			 obj = new GameFrame();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(obj,"Something went wrong");
+			e.printStackTrace();
+		}
+	}
+	
+	
+}

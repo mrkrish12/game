@@ -1,0 +1,22 @@
+package com.krishna.gaming.sprites;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+
+public class Power extends Player {
+
+	@Override
+	public BufferedImage defaultImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void printBox(Graphics pen)
+	{
+		pen.setColor(Color.RED);
+		
+		
+	}	
+	
+}

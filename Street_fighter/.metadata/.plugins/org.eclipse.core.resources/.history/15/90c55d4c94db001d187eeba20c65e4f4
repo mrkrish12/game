@@ -1,0 +1,20 @@
+package com.krishna.gaming;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class IntroScreen extends JFrame {
+
+	private JLabel label = new JLabel();
+	
+	public IntroScreen() {
+		Icon icon = new ImageIcon();
+		label.setIcon();
+	}
+	public static void main(String[] arugs)
+	{
+		}
+	
+}

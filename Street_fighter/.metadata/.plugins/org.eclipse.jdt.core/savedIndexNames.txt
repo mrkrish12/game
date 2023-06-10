@@ -1,0 +1,5 @@
+INDEX VERSION 1.131+C:\Users\asus\Downloads\Street_fighter\.metadata\.plugins\org.eclipse.jdt.core
+3907865513.index
+298246930.index
+393244332.index
+1865797976.index

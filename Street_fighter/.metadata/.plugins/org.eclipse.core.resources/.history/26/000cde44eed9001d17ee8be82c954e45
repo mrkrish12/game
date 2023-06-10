@@ -1,0 +1,237 @@
+package com.krishna.gaming;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import com.krishna.gaming.sprites.FirstPlayer;
+import com.krishna.gaming.sprites.Power;
+import com.krishna.gaming.sprites.SecondPplayer;
+import com.krishna.gaming.utiles.GameConstants;
+import com.krishna.gaming.utiles.PlayerConstants;
+
+public class Board extends JPanel implements GameConstants, PlayerConstants {
+	private FirstPlayer player;
+	private SecondPplayer secplayer;
+	private Timer timer;
+	private boolean isGameover;
+ BufferedImage backgroundImg;
+ private Power firstPow;
+ private Power secPow;
+ 
+ private void loadPower() {
+	 firstPow = new Power(20,"Goku".toUpperCase());
+	 secPow = new Power(GWIDTH/2+100,"Batman".toUpperCase());
+ }
+ private void paintPower(Graphics pen) {
+	 firstPow.printBox(pen);
+	 secPow.printBox(pen);
+	 
+ }
+ 
+	
+	public Board() throws IOException {
+		loadBackgroundImg();
+		player = new FirstPlayer();
+		secplayer = new SecondPplayer();
+		setFocusable(true);
+		bindEvents();
+		loadPower();
+		gameloop();
+	}
+	
+	public void collision() {
+		if(isCollide())
+		{
+			if(player.isAttacking()) {
+				secplayer.setCurrentMove(DAMAGE);
+				secPow.setHealth();
+			}
+			if(firstPow.getHealth()<=0 ||secPow.getHealth()<=0 ){
+				isGameover = true;
+			}
+			player.setCollide(true);
+			player.setSpeed(0);
+			if(secplayer.isAttacking())
+			{
+				player.setCurrentMove(DAMAGE);
+				firstPow.setHealth();
+			}
+			secplayer.setCollide(true);
+			secplayer.setSpeed(0);
+		}	
+		else if(!player.isAttacking()|| !secplayer.isAttacking())
+		{
+		
+			player.setCollide(false);
+			player.setSpeed(speed);
+		}
+	}
+	// to print game over messagae  
+	private void printMessgae(Graphics pen) {
+		pen.setColor(Color.RED);
+		pen.setFont(new Font("times",Font.BOLD,40));
+		pen.drawString("Game Over",GWIDTH/2-80,GHEIGHT/2);
+	}
+	
+	// for collision 
+	private boolean isCollide() {
+	 int xDistance= Math.abs(player.getX()-secplayer.getX());
+	 int yDistance= Math.abs(player.getY()-secplayer.getY());
+	 int maxW = Math.max(player.getW(), secplayer.getW());
+	 int maxH= Math.max(player.getH(), secplayer.getH());
+	 return xDistance<=maxW-40 && yDistance<=maxH;
+	}
+	
+	
+	
+	
+	
+	// for threads to come up
+	private void gameloop() {
+		timer = new Timer(200, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				repaint();
+				player.fall();
+				secplayer.fall();
+				collision();
+				
+			}
+		});
+		timer.start();
+	}
+	
+	
+	private void loadBackgroundImg() throws IOException {
+		backgroundImg = ImageIO.read(Board.class.getResource("bg4.png"));
+	}
+	
+	
+	private void bindEvents() {
+		this.addKeyListener(new KeyAdapter() {
+        
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+				player.setSpeed(0);
+				secplayer.setSpeed(0);
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+//				for 1 st player
+				
+				if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+				player.setSpeed(-speed);
+				player.setCurrentMove(WALK);
+				player.move();
+//				repaint();
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+					if(player.isCollide())
+					{
+						player.setSpeed(0);
+			
+					}
+					else {
+					player.setSpeed(speed);
+					}
+					player.setCurrentMove(WALK);
+					player.move();
+//					repaint();
+				}
+				else if(e.getKeyCode()== KeyEvent.VK_K)
+				{
+					player.setAttacking(true);
+				player.setCurrentMove(KICK);
+				}
+				else if(e.getKeyCode()== KeyEvent.VK_P)
+				{
+					player.setAttacking(true);
+				player.setCurrentMove(PUNCH);
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_SPACE)
+				{
+					
+					player.jump();
+					player.setCurrentMove(JUMP);
+				}
+				
+//				for second player
+				else if(e.getKeyCode()==KeyEvent.VK_J){
+			if(secplayer.isCollide())
+			{
+				secplayer.setSpeed(0);
+	
+			}
+			else {
+			secplayer.setSpeed(-speed);
+			}
+			secplayer.setCurrentMove(WALK);
+			secplayer.move();
+			
+//			repaint();
+		}
+				else if(e.getKeyCode()==KeyEvent.VK_L){
+					secplayer.setSpeed(speed);
+					secplayer.setCurrentMove(WALK);
+					secplayer.move();
+			
+				}
+				else if(e.getKeyCode()== KeyEvent.VK_M)
+				{
+					secplayer.setAttacking(true);
+				secplayer.setCurrentMove(KICK);
+				}
+				else if(e.getKeyCode()== KeyEvent.VK_N)
+				{
+					secplayer.setAttacking(true);
+				secplayer.setCurrentMove(PUNCH);
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_D)
+				{
+					secplayer.jump();
+					secplayer.setCurrentMove(JUMP);
+					
+					
+				}
+				
+			}
+			 
+				
+			
+	});
+		}
+	
+   @Override
+	public void paintComponent(Graphics g) {
+	   super.paintComponent(g);
+		printBackgroundImage(g);
+		player.printPlayer(g);
+		secplayer.printPlayer(g);
+		paintPower(g);
+		if(isGameover) {
+			printMessgae(g);
+			timer.stop();
+		}
+		
+	}
+   private void printBackgroundImage(Graphics pen) {
+	   pen.drawImage(backgroundImg,0,0,1500,900,null);
+   }
+ 
+
+}

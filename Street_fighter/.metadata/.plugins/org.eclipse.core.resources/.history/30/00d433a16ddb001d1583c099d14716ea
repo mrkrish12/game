@@ -1,0 +1,14 @@
+package com.krishna.gaming.sprites;
+
+import java.awt.image.BufferedImage;
+
+public class Camera extends Player {
+
+	@Override
+	public BufferedImage defaultImage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}

@@ -1,0 +1,32 @@
+package com.krishna.gaming.sprites;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import com.krishna.gaming.Board;
+
+public class Camera extends Player {
+
+	public Camera() {
+		x=0;
+		y=0;
+		w=1400;
+		h=900;
+		try {
+			image = ImageIO.read(Board.class.getResource("bg4.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public BufferedImage defaultImage() {
+		// TODO Auto-generated method stub
+		BufferedImage subImage = image.getSubimage(x, y,w,h );
+		return subImage; 
+	}
+	
+
+}

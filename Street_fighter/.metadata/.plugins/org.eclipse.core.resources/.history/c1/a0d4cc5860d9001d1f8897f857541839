@@ -1,0 +1,183 @@
+package com.krishna.gaming.sprites;
+
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+
+public class FirstPlayer extends Player{
+	
+	
+	private BufferedImage walkImage [] = new BufferedImage[4];
+	private BufferedImage standingImage [] = new BufferedImage[7];
+	private BufferedImage kickImage [] = new BufferedImage[6];
+	private BufferedImage punchImage [] = new BufferedImage[6];  
+	private BufferedImage jumpImage [] = new BufferedImage[4];
+	private BufferedImage damgeImage [] = new BufferedImage[10];
+    
+	public FirstPlayer() throws IOException {
+     x = 100;
+     y = FLOOR -h;
+     speed=0;
+     currentMove = STANDING;
+     image = ImageIO.read(FirstPlayer.class.getResource(Naruto_IMAGE));
+     loadwalkImages();
+     loadStandingImage();
+     loadkickImages();
+     loadpunchImages();
+     loadJumpImages();
+     loadDamageImage();
+     
+     }
+     
+     public void jump() {
+    	 if(!isJump)
+    	 {
+    	 force =DEFAULT_FORCE;
+    	 y = y+ force;
+    	 isJump = true;
+     }
+    	 }
+     
+     public void fall() {
+  	 if(y>=(FLOOR-h)) { 
+  		 isJump= false;
+  	 return ;}
+    	 force = force+GRAVITY ;
+    	 y = y + force;
+     }
+     
+     private void loadwalkImages() {
+    	 walkImage[0] = image.getSubimage(5,98,51,73);
+    	 walkImage[1] = image.getSubimage(65,96,51,73);
+    	 walkImage[2] = image.getSubimage(119,93,51,73);
+    	 walkImage[3] = image.getSubimage(171,89,50,80);
+     }
+     
+     private void loadStandingImage() {
+    	 standingImage[0] = image.getSubimage(78,2,31,86);
+    	 standingImage[1] = image.getSubimage(120,17,62,69);
+    	 standingImage[2] = image.getSubimage(188,24,71,61);
+    	 standingImage[3] = image.getSubimage(265,26,67,59);
+    	 standingImage[4] = image.getSubimage(340,15,59,70);
+    	 standingImage[5] = image.getSubimage(409,22,68,62);
+    	 standingImage[6] = image.getSubimage(480,24,68,62);
+    	 
+     }
+     private void loadkickImages() {
+    	 kickImage[0] = image.getSubimage(0,170,54,74);
+    	 kickImage[1] = image.getSubimage(77,333,35,68);
+    	 kickImage[2] = image.getSubimage(117,337,61,56);
+    	 kickImage[3] = image.getSubimage(2,332,72,61);
+    	 kickImage[4] = image.getSubimage(184,337,50,59);
+    	 kickImage[5] = image.getSubimage(317,334,83,61);
+    	 
+    	 
+     }
+     
+     
+     private void loadJumpImages() {
+    	 jumpImage[0] = image.getSubimage(118,15,63,69);
+    	 jumpImage[1] = image.getSubimage(306,255,46,62);
+    	 jumpImage[2] = image.getSubimage(357,254,51,62);
+    	 jumpImage[3] = image.getSubimage(2,404,46,62); 
+     }
+     
+     
+private void loadpunchImages() {
+    	 punchImage[0] = image.getSubimage(3,170,52,77);
+    	 punchImage[1] = image.getSubimage(160,180,68,63);
+    	 punchImage[2] = image.getSubimage(231,178,56,67);
+    	 punchImage[3] = image.getSubimage(292,179,64,66);
+    	 punchImage[4] = image.getSubimage(360,180,69,74);
+    	 punchImage[5] = image.getSubimage(432,174,69,77);
+     }
+     
+     
+     private BufferedImage walkImages() {
+    	 if(imageIndex >3)
+    	 {
+    		 imageIndex = 0;
+    		 currentMove = STANDING;
+    	 }
+    	BufferedImage img =  walkImage[imageIndex];
+    	imageIndex++;
+    	return img;
+     }
+     private BufferedImage kickImages() {
+    	 if(imageIndex >5)
+    	 {
+    		 imageIndex = 0;
+    		 currentMove = STANDING;
+    		 isAttacking= false;
+    	 }
+    	BufferedImage img =  kickImage[imageIndex];
+    	imageIndex++;
+    	return img;
+     }
+     private BufferedImage punchImages() {
+    	 if(imageIndex >5)
+    	 {
+    		 imageIndex = 0;
+    		 currentMove = STANDING;
+    		 isAttacking= false;
+    	 }
+    	BufferedImage img =  punchImage[imageIndex];
+    	imageIndex++;
+    	return img;
+     }
+     
+     private BufferedImage JumpImage() {
+    	 if(imageIndex >3)
+    	 {
+    		 imageIndex = 0;
+    		 if(!isJump)
+    		 {
+    		 currentMove = STANDING;
+    		 }
+    	 }
+    	BufferedImage img =  jumpImage[imageIndex];
+    	imageIndex++;
+    	return img;
+     }
+     
+     private BufferedImage StandingImage() {
+    	 if(imageIndex >6)
+    	 {
+    		 imageIndex = 0;
+    	 }
+    	BufferedImage img =  standingImage[imageIndex];
+    	imageIndex++;
+    	return img;
+     }
+     
+     
+     @Override
+     public BufferedImage defaultImage() {
+    	
+    	 if(currentMove == WALK)
+    	 {
+    	return walkImages();
+     }
+    	 else if(currentMove == KICK)
+    	 {
+    		return kickImages();
+    	 }
+    	 else if(currentMove == JUMP)
+    	 {
+    		return JumpImage();
+    	 }
+    	 else if(currentMove == PUNCH)
+    	 {
+    		 return punchImages();
+    	 }
+    	 else if(currentMove == DAMAGE)
+    	 {
+    		 return damageImage();
+    	 }
+    	 
+    		 return StandingImage();
+    	 }
+     }
